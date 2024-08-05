@@ -4,7 +4,20 @@ from visits.models import PageVisits
 
 
 this_dir = pathlib.Path(__file__).resolve().parent
-def home_page_view(request, *args, **kwargs):
+def home_view(request, *args, **kwargs):
+    qs = PageVisits.objects.all()
+    page_qs = PageVisits.objects.filter(path=request.path)
+    my_title = "Home Page"
+    my_context = {
+        "page_title": my_title,
+        "page_visits_count": page_qs.count(),
+        "total_page_visits": qs.count(),
+    }
+    html_template = "home.html"
+    PageVisits.objects.create(path=request.path)
+    return render(request, html_template, my_context)
+
+def about_view(request, *args, **kwargs):
     qs = PageVisits.objects.all()
     page_qs = PageVisits.objects.filter(path=request.path)
     my_title = "Home Page"
